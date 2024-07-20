@@ -14,7 +14,7 @@ export default {
         src="assets/logo.png"
         className='h-10 pt-1 text-'
         alt={siteTitle} />
-      <div className='text-xs text-gray-500' align="right"><i>Documentation</i></div>
+      <div className='text-xs opacity-50' align="right"><i>Documentation</i></div>
     </div>,
   project: {
     link: 'https://annaslittleprincecollection.com',

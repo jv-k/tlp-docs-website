@@ -20,8 +20,8 @@ module.exports = {
   // These are for  theme.config.js since they aren't picked up by Tailwind's tree-shake algo:
   safelist: [
     'h-10', 
-    'text-xs',
     'pt-1',
-    'text-gray-500'
+    'text-xs',
+    'opacity-50'
   ]
 };
