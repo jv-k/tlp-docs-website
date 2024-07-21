@@ -1,5 +1,4 @@
 {
-  "name": "tlp-docs2",
   "name": "tlp-docs-website",
   "version": "1.0.0",
   "description": "",
@@ -10,10 +9,10 @@
     "start": "next start",
     "pretty:check": "npx prettier . --check",
     "pretty:fix": "npx prettier . --write",
-    "md:lint": "markdownlint 'pages/**/*.md'",
     "md:build": "pnpm md:get && pnpm md:lint",
     "md:get": ". ./tools/get-markdown.sh",
     "md:slugify": "bun ./tools/slugify-filepaths.js",
+    "md:lint": "markdownlint 'pages/**/*.md?'",
     "test": "NODE_ENV=test npx mocha **/*.test.js"
   },
   "keywords": [],
