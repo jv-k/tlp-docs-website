@@ -38,6 +38,7 @@
     "@types/typescript": "^2.0.0",
     "dotenv": "^16.4.5",
     "gray-matter": "^4.0.3",
+    "mocha": "^10.7.0",
     "typescript": "5.5.3"
   }
 }
