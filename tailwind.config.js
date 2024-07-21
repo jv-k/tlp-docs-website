@@ -9,7 +9,7 @@ module.exports = {
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx,md,mdx}",
   ],
-  // darkMode: false, // or 'media' or 'class'
+  darkMode: 'class',
   theme: {
     extend: {},
   },
@@ -18,10 +18,5 @@ module.exports = {
   },
   plugins: [require('@tailwindcss/typography')],
   // These are for  theme.config.js since they aren't picked up by Tailwind's tree-shake algo:
-  safelist: [
-    'h-10', 
-    'pt-1',
-    'text-xs',
-    'opacity-50'
-  ]
+  safelist: []
 };

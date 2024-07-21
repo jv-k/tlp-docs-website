@@ -1,6 +1,7 @@
 import { useConfig } from 'nextra-theme-docs'
+import { Logo } from './components/Logo';
 
-const siteTitle = 'Anna\'s Little Prince Collection';
+export const siteTitle = 'Anna\'s Little Prince Collection';
 
 /* eslint sort-keys: error */
 /**
@@ -8,11 +9,7 @@ const siteTitle = 'Anna\'s Little Prince Collection';
  */
 export default {
   title: siteTitle,
-  logo: 
-    <div>
-      <img src="/assets/logo.png" className='h-10 pt-1' alt={siteTitle} />
-      <div className='text-xs opacity-50' align="right"><i>Documentation</i></div>
-    </div>,
+  logo: <Logo alt={siteTitle}/>,
   project: {
     link: 'https://annaslittleprincecollection.com',
     icon: '✨'
