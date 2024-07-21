@@ -2,4 +2,24 @@
 title: Welcome
 description: TLP's Documentation website
 ---
-# YO WASSUP
+import { Cards, Card } from 'nextra/components'
+import { StarsIcon, LightningIcon, CloudIcon, CardsIcon } from '../components/icons'
+import { Image } from "next/dist/client/image-component"
+import { siteTitle } from "../theme.config"
+
+# {siteTitle}
+
+<Image
+  src='/assets/lepetitprince.png'
+  width={0}
+  height={0}
+  sizes='100vw'
+  style={{ width: '100%', height: 'auto' }}
+  alt='Le Petit Prince'
+/>
+
+<Cards>
+  <Card icon={<StarsIcon />} title="Callout" href="/docs/guide/built-ins/callout" />
+  <Card icon={<LightningIcon />} title="Tabs" href="/docs/guide/built-ins/tabs" />
+  <Card icon={<CardsIcon />} title="Steps" href="/docs/guide/built-ins/steps" />
+</Cards>
