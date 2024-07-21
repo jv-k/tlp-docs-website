@@ -21,7 +21,13 @@ export default {
   primaryHue: 45,
   primarySaturation: 88,
   docsRepositoryBase:
-    'https://github.com/jv-k/tlp-master',
+    'https://github.com/jv-k/tlp-docs-website',
+  feedback: {
+    content: null
+  },
+  sidebar: {
+    autoCollapse: true
+  },
   faviconGlyph: '✨',
   head: function useHead() {
     const config = useConfig()
