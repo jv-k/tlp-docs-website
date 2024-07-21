@@ -1,5 +1,6 @@
 import { useConfig } from 'nextra-theme-docs'
 import { Logo } from './components/Logo';
+import { Footer } from './components/Footer'
 
 export const siteTitle = 'Anna\'s Little Prince Collection';
 
@@ -13,6 +14,9 @@ export default {
   project: {
     link: 'https://annaslittleprincecollection.com',
     icon: '✨'
+  },
+  footer: {
+    text: <Footer/>
   },
   primaryHue: 45,
   primarySaturation: 88,
