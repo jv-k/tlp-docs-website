@@ -7,7 +7,7 @@ const siteTitle = 'Anna\'s Little Prince Collection';
  * @type {import('nextra-theme-docs').DocsThemeConfig}
  */
 export default {
-  title: 'yo',
+  title: siteTitle,
   logo: 
     <div>
       <img 
