@@ -1,32 +1,36 @@
-import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import dotenv from 'dotenv';
+import slugify from '@sindresorhus/slugify';
 import matter from 'gray-matter';
 
 dotenv.config();
 
 /**
- * Get a list of markdown files in the directory tree.
- * @param {string} dir - The directory to scan for markdown files.
- * @returns {string[]} - Array of markdown filepaths.
+ * Get a list of markdown files and directories in the directory tree.
+ * @param {string} dir - The directory to scan for markdown files and directories.
+ * @returns {Object} - An object with `files` and `dirs` arrays.
  */
-const getMarkdownFiles = (dir) => {
+const getMarkdownAndDirs = ({dir, recurse = true}) => {
   const mdFiles = [];
+  const dirs = [];
 
   // Recursive call to process subdirectories
   const recProcessDirectory = (dir) => {
     const items = fs.readdirSync(dir);
     items.forEach((item) => {
       const filePath = path.join(dir, item);
-      if (fs.statSync(filePath).isDirectory()) {
-        recProcessDirectory(filePath);
+      if (fs.statSync(filePath).isDirectory() && filePath.indexOf('assets') == -1) {
+        dirs.push(filePath);
+        recurse && recProcessDirectory(filePath);  // Recurse into subdirectory
       } else if (/\.(md|mdx)$/i.test(item)) {
         mdFiles.push(filePath);
       }
     });
-    return mdFiles;
   };
-  return recProcessDirectory(dir);
+  
+  recProcessDirectory(dir);
+  return { files: mdFiles, dirs };
 };
 
 /**
@@ -44,48 +48,81 @@ const extractTitleFromFrontMatter = (content) => {
  * @param {string} dir - The directory to scan for markdown files.
  * @returns {Object} - JSON object with filenames as keys and titles as properties.
  */
-const generateJsonFromMarkdownFiles = (dir) => {
-  const markdownFiles = getMarkdownFiles(dir);
+const generateJsonFromMarkdownFiles = ({ dir, isRoot = false }) => {
+  const { files, dirs } = getMarkdownAndDirs({ dir, recurse: isRoot && false });
   const jsonResult = {};
-  for (const filePath of markdownFiles) {
+  
+  // Process markdown files
+  for (const filePath of files) {
     const content = fs.readFileSync(filePath, 'utf8');
     const title = extractTitleFromFrontMatter(content);
     if (title) {
-      const key = path.basename(filePath, '.md');
-      jsonResult[key] = { title };
+      const key = path.basename(filePath, path.extname(filePath));
+      const slug = slugify(key, { preserveLeadingUnderscore: true }); 
+      jsonResult[slug] = { title };
     }
+  }
+
+  // Add folders to the JSON result with type: "page"
+  for (const folder of dirs) {
+    const folderName = path.basename(folder);
+    const slug = slugify(folderName, { preserveLeadingUnderscore: true }); 
+    jsonResult[slug] = isRoot ? { title: folderName, type: 'page'} : folderName;
   }
 
   return jsonResult;
 };
 
 /**
+ * Write the _meta.json file for the directory.
+ * @param {string} dir - The directory where the _meta.json file should be written.
+ * @param {Object} jsonResult - The JSON object to write to the file.
+ */
+const writeMetaJson = (dir, jsonResult) => {
+  const metaFilePath = path.join(dir, '_meta.json');
+  fs.writeFileSync(metaFilePath, JSON.stringify(jsonResult, null, 2));
+};
+
+/**
+ * Generate JSON files for each directory and handle the root folder.
+ * @param {string} rootDir - The root directory to start scanning.
+ */
+const processDirectories = (rootDir) => {
+  const { dirs } = getMarkdownAndDirs({ dir: rootDir, recurse: false });
+  
+  // Process root directory
+  const rootJsonResult = generateJsonFromMarkdownFiles({ dir: rootDir, isRoot: true });
+  writeMetaJson(rootDir, rootJsonResult);
+
+  // Process each subdirectory
+  for (const dir of dirs) {
+    const jsonResult = generateJsonFromMarkdownFiles({ dir });
+    writeMetaJson(dir, jsonResult);
+  }
+};
+
+/**
  * Generate JSON from markdown files
- * @param {string} markdownDir
- * @param {string} outputFile
- * @returns {nothing}
+ * @param {string} markdownDir - The directory containing markdown files.
+ * @param {string} outputFile - The output JSON file.
  */
 const main = (markdownDir, outputFile) => {
-  // Directory containing your markdown files
-  const result = generateJsonFromMarkdownFiles(markdownDir);
-
-  // Output result to a JSON file
-  fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
-  console.log('JSON file generated:', result);
+  processDirectories(markdownDir);
+  console.log('JSON files generated.');
 };
 
 // Go!
 if (process.env.NODE_ENV !== 'test') {
-  const markdownPath = `${process.env.DOCS_DIR}/`;
-  const outputPath = `${process.env.DOCS_DIR}/_meta.json`;
+  const markdownPath = process.env.DOCS_DIR;
+  const outputPath = path.join(markdownPath, '_meta.json');
 
   if (markdownPath) {
-    console.info(`Generating _meta.json from '${markdownPath}' ... \n`);
+    console.info(`Generating _meta.json files from '${markdownPath}' ... \n`);
     try {
       main(markdownPath, outputPath);
-      console.info(`\n Created ${outputPath} 👌🏻`);
+      console.info(`\n Created _meta.json files successfully 👌🏻`);
     } catch (e) {
-      console.log(e);
+      console.error('Error:', e);
     }
   } else {
     console.error(`Error loading .env!`);
