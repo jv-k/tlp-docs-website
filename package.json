@@ -13,6 +13,7 @@
     "md:lint": "markdownlint 'pages/**/*.md'",
     "md:build": "pnpm md:get && pnpm md:lint",
     "md:get": ". ./tools/get-markdown.sh",
+    "md:slugify": "bun ./tools/slugify-filepaths.js",
     "test": "NODE_ENV=test npx mocha **/*.test.js"
   },
   "keywords": [],
@@ -30,6 +31,7 @@
     "tailwindcss": "^3.4.6"
   },
   "devDependencies": {
+    "@sindresorhus/slugify": "^2.2.1",
     "@types/node": "20.14.11",
     "typescript": "5.5.3"
   }
