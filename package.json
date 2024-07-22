@@ -2,7 +2,7 @@
   "name": "tlp-docs-website",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -10,11 +10,11 @@
     "pretty:check": "npx prettier . --check",
     "pretty:fix": "npx prettier . --write",
     "md:get": ". ./tools/get-markdown.sh",
-    "md:slugify": "bun ./tools/slugify-filepaths.js",
-    "md:gen-meta": "bun ./tools/generate-meta.js",
+    "md:slugify": "bun ./tools/slugify-filepaths.ts",
+    "md:gen-meta": "bun ./tools/generate-meta.ts",
     "md:lint": "markdownlint 'pages/**/*.md?'",
     "md:build": "pnpm md:get && pnpm md:gen-meta && pnpm md:slugify && pnpm md:lint",
-    "test": "NODE_ENV=test npx mocha **/*.test.js"
+    "test": "NODE_ENV=test npx mocha **/*.test.js**/*.test.ts"
   },
   "keywords": [],
   "author": "",

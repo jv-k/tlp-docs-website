@@ -1,6 +1,7 @@
 import { useConfig } from 'nextra-theme-docs'
-import { Logo } from './components/Logo';
-import { Footer } from './components/Footer'
+
+import { Logo } from '@/components/Logo';
+import { Footer } from '@/components/Footer'
 
 export const siteTitle = 'Anna\'s Little Prince Collection';
 

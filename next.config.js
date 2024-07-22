@@ -1,10 +1,11 @@
+import nextra from 'nextra'
 
-const withNextra = require('nextra')({
+const withNextra = nextra({
   theme: 'nextra-theme-docs',
-  themeConfig: './theme.config.jsx'
+  themeConfig: './theme.config'
 })
-  
-module.exports = withNextra({
+
+export default withNextra({
   webpack(config) {
     const allowedSvgRegex = /components\/icons\/.+\.svg$/
 
