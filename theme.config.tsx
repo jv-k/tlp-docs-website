@@ -2,14 +2,11 @@ import { useConfig } from 'nextra-theme-docs'
 
 import { Logo } from '@/components/Logo';
 import { Footer } from '@/components/Footer'
+import { DocsThemeConfig } from "nextra-theme-docs";
 
 export const siteTitle = 'Anna\'s Little Prince Collection';
 
-/* eslint sort-keys: error */
-/**
- * @type {import('nextra-theme-docs').DocsThemeConfig}
- */
-export default {
+const config: DocsThemeConfig & { title?: string }= {
   title: siteTitle,
   logo: <Logo alt={siteTitle}/>,
   project: {
@@ -84,3 +81,5 @@ export default {
     )
   }
 }
+
+export default config;
