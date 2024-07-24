@@ -1,17 +1,17 @@
 import { useConfig } from 'nextra-theme-docs'
 
-import { Logo } from '@/components/Logo';
-import { Footer } from '@/components/Footer'
+import { Logo } from "@/components/Logo";
+import { Footer } from "@/components/Footer"
 import { DocsThemeConfig } from "nextra-theme-docs";
 
-export const siteTitle = 'Anna\'s Little Prince Collection';
+export const siteTitle = "Anna\'s Little Prince Collection";
 
 const config: DocsThemeConfig & { title?: string }= {
   title: siteTitle,
   logo: <Logo alt={siteTitle}/>,
   project: {
-    link: 'https://annaslittleprincecollection.com',
-    icon: '✨'
+    link: "https://annaslittleprincecollection.com",
+    icon: "✨"
   },
   footer: {
     text: <Footer/>
@@ -19,20 +19,20 @@ const config: DocsThemeConfig & { title?: string }= {
   primaryHue: 45,
   primarySaturation: 88,
   docsRepositoryBase:
-    'https://github.com/jv-k/tlp-docs-website',
+    "https://github.com/jv-k/tlp-docs-website",
   feedback: {
     content: null
   },
   sidebar: {
     autoCollapse: true
   },
-  faviconGlyph: '✨',
+  faviconGlyph: "✨",
   head: function useHead() {
     const config = useConfig()
     const title = `${config.frontMatter.title || config.title} – TLP Documentation`
     const description =
       config.frontMatter.description || `${siteTitle} - Documentation`
-    const image = config.frontMatter.image || 'https://nextra.site/og.jpeg'
+    const image = config.frontMatter.image || "https://nextra.site/og.jpeg"
     return (
       <>
         <title>{title}</title>
