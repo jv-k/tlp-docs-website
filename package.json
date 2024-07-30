@@ -14,7 +14,7 @@
     "md:gen-meta": "bun ./tools/generate-meta.ts",
     "md:lint": "markdownlint 'pages/**/*.md?'",
     "md:build": "pnpm md:get && pnpm md:gen-meta && pnpm md:slugify && pnpm md:lint",
-    "test": "NODE_ENV=test npx mocha **/*.test.js**/*.test.ts"
+    "test": "NODE_ENV=test npx mocha **/*.test.js **/*.test.ts"
   },
   "keywords": [],
   "author": "",
