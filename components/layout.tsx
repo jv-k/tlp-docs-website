@@ -14,7 +14,7 @@ const fontInter = Inter({
   variable: '--font-inter',
 })
 
-export default function Layout({ children }) {
+export default function Layout({ children } : { children: any }) {
   return (
     <>
       <main
@@ -24,7 +24,7 @@ export default function Layout({ children }) {
           fontInter.variable
         )}
       >
-        {children}
+        { children }
       </main>
     </>
   )
