@@ -19,7 +19,23 @@ export default withNextra({
       use: ['@svgr/webpack']
     })
     return config
-  }  
+  }, 
+  async redirects() {
+    return [
+      // Basic redirect
+      {
+        source: '/',
+        destination: '/v3-current',
+        permanent: true,
+      },
+      // Wildcard path matching
+      {
+        source: '/blog/:slug',
+        destination: '/news/:slug',
+        permanent: true,
+      },
+    ]
+  },  
 })
   
 // If you have other Next.js configurations, you can pass them as the parameter:
