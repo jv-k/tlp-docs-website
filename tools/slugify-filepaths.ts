@@ -21,7 +21,7 @@ const processDirectory = (dirPath) => {
 
       if (fs.statSync(oldPath).isDirectory()) {
         // Process directory name
-        const newName = slugify(item, {preserveLeadingUnderscore: true});
+        const newName = slugify(item, { preserveLeadingUnderscore: true });
         const newPath = path.join(dirPath, newName);
 
         if (oldPath !== newPath) {
@@ -29,18 +29,20 @@ const processDirectory = (dirPath) => {
           newItems.push({ oldName: item, newName });
 
           // Delete old directory
-          (/^${oldPath}$/i).test(newPath)
-            && fs.rmSync(newPath, { recursive: true, force: true });
+          /^${oldPath}$/i.test(newPath) &&
+            fs.rmSync(newPath, { recursive: true, force: true });
 
           // Rename directory
           fs.renameSync(oldPath, newPath);
-          console.log(`  Renamed directory: ${item} to ${newName}`); 
+          console.log(`  Renamed directory: ${item} to ${newName}`);
         }
         // Recursive call to process subdirectories
         recProcessDirectory(newPath);
       } else if (/\.(md|png|jpg|mdx)$/i.test(item)) {
         // Process file name
-        let newName = slugify(item.substring(0, item.lastIndexOf('.')), { preserveLeadingUnderscore: true });
+        let newName = slugify(item.substring(0, item.lastIndexOf('.')), {
+          preserveLeadingUnderscore: true,
+        });
         // Add back extension
         newName += item.substring(item.lastIndexOf('.'));
         const newPath = path.join(dirPath, newName);
@@ -60,8 +62,8 @@ const processDirectory = (dirPath) => {
   recProcessDirectory(dirPath);
 
   // Update references in .md and .mdx files
-  newItems.length > 0 && updateReferences({ dirPath, newItems });
-}
+  newItems.length > 0 && updateReferences({ dirPath, newItems });
+};
 
 /**
  * Update references of old image name to new image name in .md and .mdx files.
@@ -71,16 +73,18 @@ const processDirectory = (dirPath) => {
  */
 const updateReferences = ({ dirPath, newItems }) => {
   /**
-   * encodeURIComponent escapes all characters except: 
+   * encodeURIComponent escapes all characters except:
    * A-Z a-z 0-9 - _ . ! ~ * ' ( ) - so this function takes care of that
    * @param {string} value - The string to encode
    * @returns {string} - The encoded string
-  */
+   */
   const encodeUriAll = (value) => {
-   return value.replace(/[^A-Za-z0-9]/g, c =>
-    `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+    return value.replace(
+      /[^A-Za-z0-9]/g,
+      (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`,
+    );
   };
-  
+
   /**
    * Recursively update references of old image name -> new image name
    * @param {string} {dirPath}
@@ -103,12 +107,12 @@ const updateReferences = ({ dirPath, newItems }) => {
             content = content.replace(regex, encodeUriAll(newName));
             fs.writeFileSync(filePath, content, 'utf8');
             console.log(`  Updated references in file: ${item}`);
-          }        
+          }
         });
       }
     });
   };
-  recUpdateReferences({ dirPath, newItems })
+  recUpdateReferences({ dirPath, newItems });
 };
 
 if (process.env.NODE_ENV !== 'test') {
@@ -123,4 +127,4 @@ if (process.env.NODE_ENV !== 'test') {
   }
 }
 
-export { processDirectory, updateReferences }
+export { processDirectory, updateReferences };

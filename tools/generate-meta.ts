@@ -11,7 +11,7 @@ dotenv.config();
  * @param {string} dir - The directory to scan for markdown files and directories.
  * @returns {Object} - An object with `files` and `dirs` arrays.
  */
-const getMarkdownAndDirs = ({dir, recurse = true}) => {
+const getMarkdownAndDirs = ({ dir, recurse = true }) => {
   const mdFiles = [];
   const dirs = [];
 
@@ -20,15 +20,18 @@ const getMarkdownAndDirs = ({dir, recurse = true}) => {
     const items = fs.readdirSync(dir);
     items.forEach((item) => {
       const filePath = path.join(dir, item);
-      if (fs.statSync(filePath).isDirectory() && filePath.indexOf('assets') == -1) {
+      if (
+        fs.statSync(filePath).isDirectory() &&
+        filePath.indexOf('assets') == -1
+      ) {
         dirs.push(filePath);
-        recurse && recProcessDirectory(filePath);  // Recurse into subdirectory
+        recurse && recProcessDirectory(filePath); // Recurse into subdirectory
       } else if (/\.(md|mdx)$/i.test(item)) {
         mdFiles.push(filePath);
       }
     });
   };
-  
+
   recProcessDirectory(dir);
   return { files: mdFiles, dirs };
 };
@@ -51,14 +54,14 @@ const extractTitleFromFrontMatter = (content) => {
 const generateJsonFromMarkdownFiles = ({ dir, isRoot = false }) => {
   const { files, dirs } = getMarkdownAndDirs({ dir, recurse: isRoot && false });
   const jsonResult = {};
-  
+
   // Process markdown files
   for (const filePath of files) {
     const content = fs.readFileSync(filePath, 'utf8');
     const title = extractTitleFromFrontMatter(content);
     if (title) {
       const key = path.basename(filePath, path.extname(filePath));
-      const slug = slugify(key, { preserveLeadingUnderscore: true }); 
+      const slug = slugify(key, { preserveLeadingUnderscore: true });
       jsonResult[slug] = { title };
     }
   }
@@ -66,8 +69,10 @@ const generateJsonFromMarkdownFiles = ({ dir, isRoot = false }) => {
   // Add folders to the JSON result with type: "page"
   for (const folder of dirs) {
     const folderName = path.basename(folder);
-    const slug = slugify(folderName, { preserveLeadingUnderscore: true }); 
-    jsonResult[slug] = isRoot ? { title: folderName, type: 'page'} : folderName;
+    const slug = slugify(folderName, { preserveLeadingUnderscore: true });
+    jsonResult[slug] = isRoot
+      ? { title: folderName, type: 'page' }
+      : folderName;
   }
 
   return jsonResult;
@@ -89,9 +94,12 @@ const writeMetaJson = (dir, jsonResult) => {
  */
 const processDirectories = (rootDir) => {
   const { dirs } = getMarkdownAndDirs({ dir: rootDir, recurse: false });
-  
+
   // Process root directory
-  const rootJsonResult = generateJsonFromMarkdownFiles({ dir: rootDir, isRoot: true });
+  const rootJsonResult = generateJsonFromMarkdownFiles({
+    dir: rootDir,
+    isRoot: true,
+  });
   writeMetaJson(rootDir, rootJsonResult);
 
   // Process each subdirectory
@@ -126,5 +134,5 @@ if (process.env.NODE_ENV !== 'test') {
     }
   } else {
     console.error(`Error loading .env!`);
-  }  
+  }
 }
